@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Churn Prediction</title>
+</head>
+<body>
+    <h1>Customer Churn Prediction</h1>
+    <form id="predictionForm">
+        <label for="gender">Gender:</label>
+        <input type="text" id="gender" name="gender"><br><br>
+
+        <label for="partner">Partner:</label>
+        <input type="text" id="partner" name="partner"><br><br>
+
+        <label for="dependents">Dependents:</label>
+        <input type="text" id="dependents" name="dependents"><br><br>
+
+        <label for="phoneservice">Phone Service:</label>
+        <input type="text" id="phoneservice" name="phoneservice"><br><br>
+
+        <label for="multiplelines">Multiple Lines:</label>
+        <input type="text" id="multiplelines" name="multiplelines"><br><br>
+
+        <label for="internetservice">Internet Service:</label>
+        <input type="text" id="internetservice" name="internetservice"><br><br>
+
+        <label for="onlinesecurity">Online Security:</label>
+        <input type="text" id="onlinesecurity" name="onlinesecurity"><br><br>
+
+        <label for="onlinebackup">Online Backup:</label>
+        <input type="text" id="onlinebackup" name="onlinebackup"><br><br>
+
+        <label for="deviceprotection">Device Protection:</label>
+        <input type="text" id="deviceprotection" name="deviceprotection"><br><br>
+
+        <label for="techsupport">Tech Support:</label>
+        <input type="text" id="techsupport" name="techsupport"><br><br>
+
+        <label for="streamingtv">Streaming TV:</label>
+        <input type="text" id="streamingtv" name="streamingtv"><br><br>
+
+        <label for="streamingmovies">Streaming Movies:</label>
+        <input type="text" id="streamingmovies" name="streamingmovies"><br><br>
+
+        <label for="contract">Contract:</label>
+        <input type="text" id="contract" name="contract"><br><br>
+
+        <label for="paperlessbilling">Paperless Billing:</label>
+        <input type="text" id="paperlessbilling" name="paperlessbilling"><br><br>
+
+        <label for="paymentmethod">Payment Method:</label>
+        <input type="text" id="paymentmethod" name="paymentmethod"><br><br>
+
+        <label for="monthlycharges">Monthly Charges:</label>
+        <input type="number" id="monthlycharges" name="monthlycharges"><br><br>
+
+        <label for="totalcharges">Total Charges:</label>
+        <input type="number" id="totalcharges" name="totalcharges"><br><br>
+
+        <label for="tenure">Tenure:</label>
+        <input type="number" id="tenure" name="tenure"><br><br>
+
+        <label for="churn">Churn:</label>
+        <input type="text" id="churn" name="churn"><br><br>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("predictionForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const form = new FormData(document.getElementById("predictionForm"));
+            const data = {};
+            form.forEach((value, key) => {data[key] = value});
+            
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                const resultDiv = document.getElementById("result");
+                resultDiv.innerHTML = `
+                    <h3>Prediction: ${result.prediction}</h3>
+                    <p>Confidence: ${result.confidence}</p>
+                `;
+            })
+            .catch(error => console.error("Error:", error));
+        });
+    </script>
+</body>
+</html>
